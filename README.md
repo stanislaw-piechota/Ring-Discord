@@ -1,5 +1,5 @@
 ## Bot do Discorda klasy 2E PLOPŁ
-[![](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/downloads/release/python-378/)[![](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+[![](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/downloads/release/python-378/) [![](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
 Instalacja:
 1. ```Git clone https://github.com/stasio14/ring```
