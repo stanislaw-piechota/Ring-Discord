@@ -1,3 +1,6 @@
+#main author: Stanisław Piechota (stasio14)
+#voting system inspiration: Michał Kiedrzyński (michkied)
+
 import asyncio
 import discord
 from time import sleep
@@ -71,9 +74,52 @@ class Music(commands.Cog):
                     data['perms'][perm].append(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data))
-            await ctx.send(f'Permission **{perm}** granted for user **{new}**')
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Permission **{perm}** granted for user **{new}**\n\n' \
+                   f':white_check_mark: Done by: {ctx.author}'
+            embed = discord.Embed(description=text, color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            await ctx.send(embed=embed)
         else:
-            await ctx.send('You don\'t have permissions to invoke this command')
+            new = ctx.message.mentions[0].nick[:2]
+            apprs = []
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Granting permission **{perm}** for user **{new}**\n\n' \
+                   ':arrows_counterclockwise: Waiting for approve ({}/14)'
+            embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            message = await ctx.send(embed=embed)
+            await message.add_reaction('✅')
+
+            def check(reaction, user):
+                return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
+
+            while len(apprs) < 14:
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(description=':alarm_clock: **Time to grant passed**')
+                    await message.edit(embed=embed)
+                    await message.remove_reaction('✅', ctx.guild.me)
+                    return
+
+                apprs = await reaction.users().flatten()
+                apprs.remove(ctx.guild.me)
+
+                embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+                embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+                await message.edit(embed=embed)
+
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Permission **{perm}** granted for user **{new}**\n\n' \
+                   ':white_check_mark: Granted in voting (14)'
+            embed = discord.Embed(description=text, color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            if new not in data['perms'][perm]:
+                data['perms'][perm].append(new)
+            with open('perms.json', 'w') as f:
+                f.write(json.dumps(data))
+            await message.edit(embed=embed)
 
     @commands.command(brief='ungrant [perm / help] [@ping ...] - takes away permission')
     async def ungrant(self, ctx, perm : str):
@@ -91,9 +137,52 @@ class Music(commands.Cog):
                     data['perms'][perm].remove(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data))
-            await ctx.send(f'Permission **{perm}** taken away from user **{new}**')
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Permission **{perm}** taken away from user **{new}**\n\n' \
+                   f':white_check_mark: Done by: {ctx.author}'
+            embed = discord.Embed(description=text, color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            await ctx.send(embed=embed)
         else:
-            await ctx.send('You don\'t have permissions to invoke this command')
+            new = ctx.message.mentions[0].nick[:2]
+            apprs = []
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Taking away permission **{perm}** from user **{new}**\n\n' \
+                   ':arrows_counterclockwise: Waiting for approve ({}/14)'
+            embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            message = await ctx.send(embed=embed)
+            await message.add_reaction('✅')
+
+            def check(reaction, user):
+                return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
+
+            while len(apprs) < 14:
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(description=':alarm_clock: **Time to ungrant passed**')
+                    await message.edit(embed=embed)
+                    await message.remove_reaction('✅', ctx.guild.me)
+                    return
+
+                apprs = await reaction.users().flatten()
+                apprs.remove(ctx.guild.me)
+
+                embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+                embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+                await message.edit(embed=embed)
+
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Permission **{perm}** taken away from user **{new}**\n\n' \
+                   ':white_check_mark: Ungranted in voting (14)'
+            embed = discord.Embed(description=text, color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            if new in data['perms'][perm]:
+                data['perms'][perm].remove(new)
+            with open('perms.json', 'w') as f:
+                f.write(json.dumps(data))
+            await message.edit(embed=embed)
 
     @commands.command(brief='Check permissions')
     async def perms(self, ctx):
