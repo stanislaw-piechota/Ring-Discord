@@ -85,7 +85,7 @@ class Music(commands.Cog):
             apprs = []
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Granting permission **{perm}** for user **{new}**\n\n' \
-                   ':arrows_counterclockwise: Waiting for approve ({}/14)'
+                   ':arrows_counterclockwise: Waiting for approve ({}/10)'
             embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             message = await ctx.send(embed=embed)
@@ -94,7 +94,7 @@ class Music(commands.Cog):
             def check(reaction, user):
                 return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
 
-            while len(apprs) < 14:
+            while len(apprs) < 10:
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
                 except asyncio.TimeoutError:
@@ -112,7 +112,7 @@ class Music(commands.Cog):
 
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Permission **{perm}** granted for user **{new}**\n\n' \
-                   ':white_check_mark: Granted in voting (14)'
+                   ':white_check_mark: Granted in voting (10)'
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             if new not in data['perms'][perm]:
@@ -148,7 +148,7 @@ class Music(commands.Cog):
             apprs = []
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Taking away permission **{perm}** from user **{new}**\n\n' \
-                   ':arrows_counterclockwise: Waiting for approve ({}/14)'
+                   ':arrows_counterclockwise: Waiting for approve ({}/10)'
             embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             message = await ctx.send(embed=embed)
@@ -157,7 +157,7 @@ class Music(commands.Cog):
             def check(reaction, user):
                 return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
 
-            while len(apprs) < 14:
+            while len(apprs) < 10:
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
                 except asyncio.TimeoutError:
@@ -175,7 +175,7 @@ class Music(commands.Cog):
 
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Permission **{perm}** taken away from user **{new}**\n\n' \
-                   ':white_check_mark: Ungranted in voting (14)'
+                   ':white_check_mark: Ungranted in voting (10)'
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             if new in data['perms'][perm]:
