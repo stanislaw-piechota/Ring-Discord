@@ -73,7 +73,7 @@ class Music(commands.Cog):
                 if new not in data['perms'][perm]:
                     data['perms'][perm].append(new)
             with open('perms.json', 'w') as f:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Permission **{perm}** granted for user **{new}**\n\n' \
                    f':white_check_mark: Done by: {ctx.author}'
@@ -118,25 +118,52 @@ class Music(commands.Cog):
             if new not in data['perms'][perm]:
                 data['perms'][perm].append(new)
             with open('perms.json', 'w') as f:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data, indent=2))
             await message.edit(embed=embed)
 
     @commands.command(brief='ungrant [perm / help] [@ping ...] - takes away permission')
     async def ungrant(self, ctx, perm : str):
-        if ctx.author.nick[:2] in data['perms']['grant']:
+        if ctx.author.nick[:2] in data['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can ungrant following permissions:\n```\nall\ngrant\nring\nvolume\n```')
                 return
             new = ctx.message.mentions[0].nick[:2]
             if perm=='all':
                 for k in data['perms'].keys():
-                    if new in data['perms'][k]:
-                        data['perms'][k].remove(new)
+                    if new in data['perms'][k]['ba']:
+                        data['perms'][k]['ba'].remove(new)
+                    if new in data['perms'][k]['bv']:
+                        data['perms'][k]['bv'].remove(new)
             else:
-                if new in data['perms'][perm]:
-                    data['perms'][perm].remove(new)
+                if new in data['perms'][perm]['ba']:
+                    data['perms'][perm]['ba'].remove(new)
+                if new in data['perms'][perm]['bv']:
+                    data['perms'][perm]['bv'].remove(new)
             with open('perms.json', 'w') as f:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data, indent=2))
+            text = '**__CHANGING PERMISSIONS__**\n' \
+                   f'Permission **{perm}** taken away from user **{new}**\n\n' \
+                   f':white_check_mark: Done by: {ctx.author}'
+            embed = discord.Embed(description=text, color=0xfffffe)
+            embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+            await ctx.send(embed=embed)
+        elif ctx.author.nick[:2] in data['perms']['grant']['bv']:
+            if perm == 'help':
+                await ctx.send('You can ungrant following permissions:\n```\ngrant\nring\nvolume\n```')
+                return
+            new = ctx.message.mentions[0].nick[:2]
+            if new in data['perms'][perm]['ba']:
+                text = '**__CHANGING PERMISSIONS__**\n' \
+                       f'You cannot take away this permission from user **{new}**\n\n' \
+                       'Only admin feature :shrug: :sunglasses:'
+                embed = discord.Embed(description=text, color=0xfffffe)
+                embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+                message = await ctx.send(embed=embed)
+                return
+            if new in data['perms'][perm]['bv']:
+                data['perms'][perm]['bv'].remove(new)
+            with open('perms.json', 'w') as f:
+                f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Permission **{perm}** taken away from user **{new}**\n\n' \
                    f':white_check_mark: Done by: {ctx.author}'
@@ -145,9 +172,18 @@ class Music(commands.Cog):
             await ctx.send(embed=embed)
         else:
             new = ctx.message.mentions[0].nick[:2]
-            apprs = []
+            if new in data['perms'][perm]['ba']:
+                text = '**__CHANGING PERMISSIONS__**\n' \
+                       f'You cannot take away this permission from user **{new}**\n\n' \
+                       'Only admin feature :shrug: :sunglasses:'
+                embed = discord.Embed(description=text, color=0xfffffe)
+                embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
+                message = await ctx.send(embed=embed)
+                return
+            apprs = []; admin_appr = False; admin_name = 'waiting for approve'; admin_state = ':arrows_counterclockwise:'
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Taking away permission **{perm}** from user **{new}**\n\n' \
+                   f':{admin_state} Admin: {admin_name}\n' \
                    ':arrows_counterclockwise: Waiting for approve ({}/10)'
             embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
@@ -157,9 +193,9 @@ class Music(commands.Cog):
             def check(reaction, user):
                 return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
 
-            while len(apprs) < 10:
+            while len(apprs) < 10 or not admin_appr:
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=15, check=check)
                 except asyncio.TimeoutError:
                     embed = discord.Embed(description=':alarm_clock: **Time to ungrant passed**')
                     await message.edit(embed=embed)
@@ -169,31 +205,51 @@ class Music(commands.Cog):
                 apprs = await reaction.users().flatten()
                 apprs.remove(ctx.guild.me)
 
+                if user.nick[:2] in data['perms']['grant']['ba']:
+                    admin_appr = True
+                    admin_name = user
+                    admin_state = ':white_check_mark:'
+
+                text = '**__CHANGING PERMISSIONS__**\n' \
+                       f'Taking away permission **{perm}** from user **{new}**\n\n' \
+                       f'{admin_state} Admin: {admin_name}\n' \
+                       ':arrows_counterclockwise: Waiting for approve ({}/10)'
                 embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
                 embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
                 await message.edit(embed=embed)
 
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Permission **{perm}** taken away from user **{new}**\n\n' \
+                   f':white_check_mark: Approved by: {admin_name}\n' \
                    ':white_check_mark: Ungranted in voting (10)'
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
-            if new in data['perms'][perm]:
-                data['perms'][perm].remove(new)
+            if new in data['perms'][perm]['bv']:
+                data['perms'][perm]['bv'].remove(new)
             with open('perms.json', 'w') as f:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data, indent=2))
             await message.edit(embed=embed)
 
     @commands.command(brief='Check permissions')
     async def perms(self, ctx):
         nick = ctx.author.nick[:2]
-        mess = 'Your permissions:\n```\n'
+        mess = 'Your permissions:\n```\nBy admin:\n'
+        admin = ''; voting = ''
         for k in data['perms'].keys():
-            if nick in data['perms'][k]:
-                mess = mess + f'{k}\n'
+            if nick in data['perms'][k]['ba']:
+                admin = admin + f'{k}\n'
+            if nick in data['perms'][k]['bv']:
+                voting = voting + f'{k}\n'
+        if admin:
+            mess += admin
+        else:
+            mess += 'None\n'
+        mess += '\nBy voting:\n'
+        if voting:
+            mess += voting
+        else:
+            mess += 'None\n'
         mess += '\n```'
-        if mess == 'Your permissions:\n```\n\n```':
-            mess = 'Your permissions:\n```\nNone\n```'
         await ctx.send(mess)
 
     @commands.command(brief='volume <percent> - changes volume')
@@ -203,7 +259,7 @@ class Music(commands.Cog):
             self.volume = vol / 100
             data['vol'] = vol
             with open('perms.json', 'w') as f:
-                f.write(json.dumps(data))
+                f.write(json.dumps(data, indent=2))
             await ctx.send(f'Volume changed to {vol}%')
         else:
             await ctx.send('You don\'t have permissions to invoke this command')
