@@ -76,3 +76,5 @@ Instalacja:
 - problemy z dołączaniem do kanału
 - nie działająca komenda stop
 - brak opuszczania kanału
+
+❤ Specjalne podziękowanie dla @michkied za inspirację w tworzeniu głosowania 
