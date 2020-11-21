@@ -17,6 +17,7 @@ Instalacja:
 - Uporządkowanie przyznawania uprawnień
 - Zgoda admina na odbieranie uprawnień
 - Zmiana odpowiedzi na komendę `perms`
+
 **Do zrobienia**
 - Dostosowanie komendy `grant`
 - Utworzenie nowej komendy do zmiany minimum głosów
@@ -28,6 +29,7 @@ Instalacja:
 **Zmiany**
 - Dodanie głosowania przy przyznawaniu uprawnienia `grant`
 - użycie elementu `discord.Embed`
+
 **Problemy**
 - za mało adminofaszyzmu
 
@@ -40,6 +42,7 @@ Instalacja:
 **Zmiany**
 - komendy ```trans```
 - skrócenie trwania dzwonka do 3 sekund
+
 **Problemy**
 - błędy Google API
 
@@ -51,6 +54,7 @@ Instalacja:
 **Zmiany**
 - komendy ```grant``` i ```ungrant```
 - komenda ```perms```
+
 **Problemy**
 - brak opisów
 - adminofaszyzm
@@ -59,6 +63,7 @@ Instalacja:
 **Zmiany**
 - próba komendy ```volume```
 - usunięcie komendy ```stop```
+
 **Problemy**
 - zarządzanie botem
 
@@ -66,6 +71,7 @@ Instalacja:
 **Zmiany**
 - komenda ```ring```
 - komenda ```stop```
+
 **Problemy**
 - problemy z dołączaniem do kanału
 - nie działająca komenda stop
