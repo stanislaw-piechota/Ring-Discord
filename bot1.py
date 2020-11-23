@@ -16,7 +16,6 @@ dt = datetime.datetime.now
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.volume = data['vol']/100
 
     def _play(self, ctx, query):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
@@ -24,8 +23,9 @@ class Music(commands.Cog):
 
     @commands.command()
     async def ring(self, ctx):
-        print(f'{dt()} RING {ctx.guild.name}')
-        if ctx.author.nick[:2] in data['perms']['ring']['ba'] or ctx.author.nick[:2] in data['perms']['ring']['bv']:
+        serv = ctx.guild.name
+        print(f'{dt()} RING {serv} {ctx.author}')
+        if ctx.author.nick[:2] in data[serv]['perms']['ring']['ba'] or ctx.author.nick[:2] in data[serv]['perms']['ring']['bv']:
             if ctx.author.voice:
                 try:
                     ctx.voice_client.disconnect()
@@ -39,9 +39,10 @@ class Music(commands.Cog):
             else:
                 await ctx.send("You are not connected to a voice channel.")
                 return
+            self.volume = data[serv]['vol']/100
             self._play(ctx, 'dzwonek.mp3')
             ctx.voice_client.source.volume = self.volume
-            await asyncio.sleep(3)
+            await asyncio.sleep(2)
             await ctx.voice_client.disconnect()
         else:
             await ctx.send('You don\'t have permissions to invoke this command')
@@ -56,8 +57,9 @@ class Music(commands.Cog):
 
     @commands.command(brief='grant [perm / help] [@ping ...] - grants permission')
     async def grant(self, ctx, perm : str):
-        print(f'{dt()} VOLUME {ctx.guild.name}')
-        if ctx.author.nick[:2] in data['perms']['grant']['ba']:
+        serv = ctx.guild.name
+        print(f'{dt()} GRANT {serv} {ctx.author}')
+        if ctx.author.nick[:2] in data[serv]['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can grant following permissions:\n```\nall\ngrant\nring\nvolume```')
                 return
@@ -67,12 +69,12 @@ class Music(commands.Cog):
                 await ctx.send('You have to mention user')
                 return
             if perm=='all':
-                for k in data['perms'].keys():
-                    if new not in data['perms'][k]['ba']:
-                        data['perms'][k]['ba'].append(new)
+                for k in data[serv]['perms'].keys():
+                    if new not in data[serv]['perms'][k]['ba']:
+                        data[serv]['perms'][k]['ba'].append(new)
             else:
-                if new not in data['perms'][perm]['ba']:
-                    data['perms'][perm]['ba'].append(new)
+                if new not in data[serv]['perms'][perm]['ba']:
+                    data[serv]['perms'][perm]['ba'].append(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
@@ -81,13 +83,13 @@ class Music(commands.Cog):
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             await ctx.send(embed=embed)
-        elif ctx.author.nick[:2] in data['perms']['grant']['bv']:
+        elif ctx.author.nick[:2] in data[serv]['perms']['grant']['bv']:
             if perm == 'help':
                 await ctx.send('You can ungrant following permissions:\n```\ngrant\nring\nvolume\n```')
                 return
             new = ctx.message.mentions[0].nick[:2]
-            if not new in data['perms'][perm]['bv']:
-                data['perms'][perm]['bv'].append(new)
+            if not new in data[serv]['perms'][perm]['bv']:
+                data[serv]['perms'][perm]['bv'].append(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
@@ -101,7 +103,7 @@ class Music(commands.Cog):
             admin_appr = False; admin_name = 'waiting for approve'; admin_state = ':arrows_counterclockwise:'
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Granting permission **{perm}** for user **{new}**\n\n' \
-                   f':{admin_state} Admin: {admin_name}\n' \
+                   f'{admin_state} Admin: {admin_name}\n' \
                    ':arrows_counterclockwise: Waiting for approve ({}/10)'
             embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
@@ -123,7 +125,7 @@ class Music(commands.Cog):
                 apprs = await reaction.users().flatten()
                 apprs.remove(ctx.guild.me)
 
-                if user.nick[:2] in data['perms']['grant']['ba']:
+                if user.nick[:2] in data[serv]['perms']['grant']['ba']:
                     admin_appr = True
                     admin_name = user
                     admin_state = ':white_check_mark:'
@@ -142,31 +144,32 @@ class Music(commands.Cog):
                    ':white_check_mark: Granted in voting (10)'
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
-            if new not in data['perms'][perm]['bv']:
-                data['perms'][perm]['bv'].append(new)
+            if new not in data[serv]['perms'][perm]['bv']:
+                data[serv]['perms'][perm]['bv'].append(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             await message.edit(embed=embed)
 
     @commands.command(brief='ungrant [perm / help] [@ping ...] - takes away permission')
     async def ungrant(self, ctx, perm : str):
-        print(f'{dt()} UNGRANT {ctx.guild.name}')
-        if ctx.author.nick[:2] in data['perms']['grant']['ba']:
+        serv = ctx.guild.name
+        print(f'{dt()} UNGRANT {serv} {ctx.author}')
+        if ctx.author.nick[:2] in data[serv]['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can ungrant following permissions:\n```\nall\ngrant\nring\nvolume\n```')
                 return
             new = ctx.message.mentions[0].nick[:2]
             if perm=='all':
-                for k in data['perms'].keys():
-                    if new in data['perms'][k]['ba']:
-                        data['perms'][k]['ba'].remove(new)
-                    if new in data['perms'][k]['bv']:
-                        data['perms'][k]['bv'].remove(new)
+                for k in data[serv]['perms'].keys():
+                    if new in data[serv]['perms'][k]['ba']:
+                        data[serv]['perms'][k]['ba'].remove(new)
+                    if new in data[serv]['perms'][k]['bv']:
+                        data[serv]['perms'][k]['bv'].remove(new)
             else:
-                if new in data['perms'][perm]['ba']:
-                    data['perms'][perm]['ba'].remove(new)
-                if new in data['perms'][perm]['bv']:
-                    data['perms'][perm]['bv'].remove(new)
+                if new in data[serv]['perms'][perm]['ba']:
+                    data[serv]['perms'][perm]['ba'].remove(new)
+                if new in data[serv]['perms'][perm]['bv']:
+                    data[serv]['perms'][perm]['bv'].remove(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
@@ -175,12 +178,12 @@ class Music(commands.Cog):
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             await ctx.send(embed=embed)
-        elif ctx.author.nick[:2] in data['perms']['grant']['bv']:
+        elif ctx.author.nick[:2] in data[serv]['perms']['grant']['bv']:
             if perm == 'help':
                 await ctx.send('You can ungrant following permissions:\n```\ngrant\nring\nvolume\n```')
                 return
             new = ctx.message.mentions[0].nick[:2]
-            if new in data['perms'][perm]['ba']:
+            if new in data[serv]['perms'][perm]['ba']:
                 text = '**__CHANGING PERMISSIONS__**\n' \
                        f'You cannot take away this permission from user **{new}**\n\n' \
                        'Only admin feature :shrug: :sunglasses:'
@@ -188,8 +191,8 @@ class Music(commands.Cog):
                 embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
                 message = await ctx.send(embed=embed)
                 return
-            if new in data['perms'][perm]['bv']:
-                data['perms'][perm]['bv'].remove(new)
+            if new in data[serv]['perms'][perm]['bv']:
+                data[serv]['perms'][perm]['bv'].remove(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             text = '**__CHANGING PERMISSIONS__**\n' \
@@ -200,7 +203,7 @@ class Music(commands.Cog):
             await ctx.send(embed=embed)
         else:
             new = ctx.message.mentions[0].nick[:2]
-            if new in data['perms'][perm]['ba']:
+            if new in data[serv]['perms'][perm]['ba']:
                 text = '**__CHANGING PERMISSIONS__**\n' \
                        f'You cannot take away this permission from user **{new}**\n\n' \
                        'Only admin feature :shrug: :sunglasses:'
@@ -233,7 +236,7 @@ class Music(commands.Cog):
                 apprs = await reaction.users().flatten()
                 apprs.remove(ctx.guild.me)
 
-                if user.nick[:2] in data['perms']['grant']['ba']:
+                if user.nick[:2] in data[serv]['perms']['grant']['ba']:
                     admin_appr = True
                     admin_name = user
                     admin_state = ':white_check_mark:'
@@ -252,22 +255,23 @@ class Music(commands.Cog):
                    ':white_check_mark: Ungranted in voting (10)'
             embed = discord.Embed(description=text, color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
-            if new in data['perms'][perm]['bv']:
-                data['perms'][perm]['bv'].remove(new)
+            if new in data[serv]['perms'][perm]['bv']:
+                data[serv]['perms'][perm]['bv'].remove(new)
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             await message.edit(embed=embed)
 
     @commands.command(brief='Check permissions')
     async def perms(self, ctx):
-        print(f'{dt()} PERMS {ctx.guild.name}')
+        serv = ctx.guild.name
+        print(f'{dt()} PERMS {serv} {ctx.author}')
         nick = ctx.author.nick[:2]
         mess = 'Your permissions:\n```\nBy admin:\n'
         admin = ''; voting = ''
-        for k in data['perms'].keys():
-            if nick in data['perms'][k]['ba']:
+        for k in data[serv]['perms'].keys():
+            if nick in data[serv]['perms'][k]['ba']:
                 admin = admin + f'{k}\n'
-            if nick in data['perms'][k]['bv']:
+            if nick in data[serv]['perms'][k]['bv']:
                 voting = voting + f'{k}\n'
         if admin:
             mess += admin
@@ -283,11 +287,12 @@ class Music(commands.Cog):
 
     @commands.command(brief='volume <percent> - changes volume')
     async def volume(self, ctx, vol : int):
-        print(f'{dt()} VOLUME {ctx.guild.name}')
+        serv = ctx.guild.name
+        print(f'{dt()} VOLUME {serv} {ctx.author}')
         nick = ctx.author.nick[:2]
-        if nick in data['perms']['volume']['ba'] or nick in data['perms']['volume']['bv']:
-            self.volume = vol / 100
-            data['vol'] = vol
+        if nick in data[serv]['perms']['volume']['ba'] or nick in data[serv]['perms']['volume']['bv']:
+            volume = vol / 100
+            data[serv]['vol'] = volume
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             await ctx.send(f'Volume changed to {vol}%')
@@ -296,7 +301,8 @@ class Music(commands.Cog):
 
     @commands.command(brief='trans [pl/en/es/ru] "text"')
     async def trans(self, ctx, lang: str, phrase: str):
-        print(f'{dt()} TRANS {ctx.guild.name}')
+        serv = ctx.guild.name
+        print(f'{dt()} TRANS {serv} {ctx.author}')
         try:
             avlb = ['pl', 'en', 'ru', 'es']
             if lang in avlb:
@@ -314,7 +320,8 @@ class Music(commands.Cog):
 
     @commands.command(brief='ru text')
     async def ru(self, ctx, *args):
-        print(f'{dt()} RU {ctx.guild.name}')
+        serv = ctx.guild.name
+        print(f'{dt()} RU {serv} {ctx.author}')
         try:
             trnsd = trns(' '.join(args), dest='ru')
             mess = trnsd.text + '\nPronunciation: '+trnsd.pronunciation

@@ -31,6 +31,15 @@
 
 ## Dzienik zmian
 
+### 2.0.0-alpha
+**Zmiany**
+- działanie na wielu serwerach (nietestowane)
+- zmiana długości dzownka na 1,5s
+
+**Do zrobienia**
+- testy
+- setup
+
 ### 1.4.3
 **Zmiany**
 - zgoda admina na przyznawanie uprawnień
