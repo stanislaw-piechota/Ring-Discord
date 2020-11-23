@@ -11,19 +11,27 @@
 
 ## Komendy bota
 **Ogólne**
+
 `//trans <lang> fraza` - przetłumaczenie frazy (język wykrywany automatycznie) na podany
+
 `//ru fraza` - tłumaczenie frazy (język wyjrywany automatycznie) na język rosyjski
+
 `//grant <perm> <@użytkownik>` - nadanie uprawnienia dla użytkownika (głosowanie)
 - daje uprawnienie kategorii _user_
+
 `//ungrant <perm> <@użytkownik>` - odebranie uprawnienia dla użytkownika (głosowanie)
 - próba odebrania uprawnienia kategorii _admin_ skutkuje komunikatem o błędzie
 
 **Dla osób z uprawnieniami**
+
 `//ring` - Dołączenie do kanału autora; włączenie sygnału; opuszczenie kanału
+
 `//volume <volume>` - zmiana głośności bota
+
 `//grant <perm> <@użytkownik>` - nadanie uprawnienia dla użytkownika
 - _admin_ daje uprawnienia _admin_
 - _user_ daje uprawnienia _user_
+
 `//ungrant <perm> <@użytkownik>` - odebranie uprawnienia dla użytkownika
 - _user_ może odebrać tylko uprawnienie _user_ (inaczej błąd)
 
