@@ -1,7 +1,7 @@
 # Bot do Discorda klasy 2E PLOPŁ
 [![](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/downloads/release/python-378/) [![](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
-##Instalacja:
+## Instalacja:
 1. ```git clone https://github.com/stasio14/ring```
 2. Uruchom cmd; ```cd folderPath```
 3. Upewnij się, że posiadasz skonfigurowanego Pythona
@@ -9,8 +9,7 @@
 5. Podstaw token w pliku `secrets.py`
 6. ```python bot1.py```
 
-
-##Komendy bota
+## Komendy bota
 **Ogólne**
 `//trans <lang> fraza` - przetłumaczenie frazy (język wykrywany automatycznie) na podany
 `//ru fraza` - tłumaczenie frazy (język wyjrywany automatycznie) na język rosyjski
