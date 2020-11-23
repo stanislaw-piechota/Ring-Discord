@@ -33,6 +33,11 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 ## Dzienik zmian
 
+### 2.0.0
+**Zmiany**
+- przetestowane wiele serwerów
+- setup
+
 ### 2.0.0-alpha
 **Zmiany**
 - działanie na wielu serwerach (nietestowane)

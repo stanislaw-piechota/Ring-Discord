@@ -1,3 +1,5 @@
+#https://discord.com/api/oauth2/authorize?client_id=773874155807834113&permissions=8&scope=bot
+
 import asyncio
 import discord
 from time import sleep
@@ -16,6 +18,50 @@ dt = datetime.datetime.now
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        print(f'{dt()} Bot joined new guild {guild.name} {guild.id}')
+        if guild.me.guild_permissions.administrator:
+            channel = await guild.create_text_channel('Ring-setup', overwrites={guild.default_role: discord.PermissionOverwrite(read_messages=False)})
+            if guild.name in data.keys():
+                await channel.send(':white_check_mark: Bot already configured for this server')
+                return
+            else:
+                await channel.send('Hi. Well done. Bot is on the server. **Person with admin rights have to type in `activate` to activate bot**. You have 10 mins')
+                def check(msg):
+                    if isinstance(msg.author, discord.Member):
+                        return (msg.author == guild.owner or msg.author.guild_permissions.administrator) and msg.author != guild.me and msg.channel == channel
+                    return False
+                while True:
+                    try:
+                        message = await self.bot.wait_for('message', timeout=600, check=check)
+                    except asyncio.TimeoutError:
+                        await guild.leave()
+                        return
+
+                    if message.content == 'activate':
+                        dcp = {"perms":{"ring":{"ba":[message.author.nick[:2]],"bv":[]}, \
+                        "volume":{"ba":[message.author.nick[:2]], "bv":[]}, \
+                        "grant":{"ba":[message.author.nick[:2]], "bv":[]}}, "vol":100}
+                        data[guild.name] = dcp
+
+                        with open('perms.json', 'w') as file:
+                            file.write(json.dumps(data, indent=2))
+
+                        await channel.send(f':sunglasses: Congratulations. **Bot activated**. User {message.author.nick[:2]} have admin rights')
+                        return
+
+                    else:
+                        await channel.send(':x: wrong message')
+
+        else:
+            print(f'Bot does not have admin rights {guild.name} ({guild.id})')
+            try:
+                await guild.text_channels[0].send(':x: **Bot needs admin rights. Add it once again, checking privileges**')
+            except discord.Forbidden:
+                pass
+            await guild.leave()
 
     def _play(self, ctx, query):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
@@ -291,8 +337,7 @@ class Music(commands.Cog):
         print(f'{dt()} VOLUME {serv} {ctx.author}')
         nick = ctx.author.nick[:2]
         if nick in data[serv]['perms']['volume']['ba'] or nick in data[serv]['perms']['volume']['bv']:
-            volume = vol / 100
-            data[serv]['vol'] = volume
+            data[serv]['vol'] = vol
             with open('perms.json', 'w') as f:
                 f.write(json.dumps(data, indent=2))
             await ctx.send(f'Volume changed to {vol}%')
