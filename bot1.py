@@ -5,11 +5,13 @@ import json
 from secrets import token1, token2
 from discord.ext import commands
 from googletrans import Translator
+import datetime
 
 with open('perms.json') as f:
     data = json.loads(f.read())
 
 trns = Translator().translate
+dt = datetime.datetime.now
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -22,7 +24,8 @@ class Music(commands.Cog):
 
     @commands.command()
     async def ring(self, ctx):
-        if ctx.author.nick[:2] in data['perms']['ring']:
+        print(f'{dt()} RING {ctx.guild.name}')
+        if ctx.author.nick[:2] in data['perms']['ring']['ba'] or ctx.author.nick[:2] in data['perms']['ring']['bv']:
             if ctx.author.voice:
                 try:
                     ctx.voice_client.disconnect()
@@ -53,6 +56,7 @@ class Music(commands.Cog):
 
     @commands.command(brief='grant [perm / help] [@ping ...] - grants permission')
     async def grant(self, ctx, perm : str):
+        print(f'{dt()} VOLUME {ctx.guild.name}')
         if ctx.author.nick[:2] in data['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can grant following permissions:\n```\nall\ngrant\nring\nvolume```')
@@ -146,6 +150,7 @@ class Music(commands.Cog):
 
     @commands.command(brief='ungrant [perm / help] [@ping ...] - takes away permission')
     async def ungrant(self, ctx, perm : str):
+        print(f'{dt()} UNGRANT {ctx.guild.name}')
         if ctx.author.nick[:2] in data['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can ungrant following permissions:\n```\nall\ngrant\nring\nvolume\n```')
@@ -255,6 +260,7 @@ class Music(commands.Cog):
 
     @commands.command(brief='Check permissions')
     async def perms(self, ctx):
+        print(f'{dt()} PERMS {ctx.guild.name}')
         nick = ctx.author.nick[:2]
         mess = 'Your permissions:\n```\nBy admin:\n'
         admin = ''; voting = ''
@@ -277,8 +283,9 @@ class Music(commands.Cog):
 
     @commands.command(brief='volume <percent> - changes volume')
     async def volume(self, ctx, vol : int):
+        print(f'{dt()} VOLUME {ctx.guild.name}')
         nick = ctx.author.nick[:2]
-        if nick in data['perms']['volume']:
+        if nick in data['perms']['volume']['ba'] or nick in data['perms']['volume']['bv']:
             self.volume = vol / 100
             data['vol'] = vol
             with open('perms.json', 'w') as f:
@@ -289,6 +296,7 @@ class Music(commands.Cog):
 
     @commands.command(brief='trans [pl/en/es/ru] "text"')
     async def trans(self, ctx, lang: str, phrase: str):
+        print(f'{dt()} TRANS {ctx.guild.name}')
         try:
             avlb = ['pl', 'en', 'ru', 'es']
             if lang in avlb:
@@ -306,8 +314,8 @@ class Music(commands.Cog):
 
     @commands.command(brief='ru text')
     async def ru(self, ctx, *args):
+        print(f'{dt()} RU {ctx.guild.name}')
         try:
-            print(' '.join(args))
             trnsd = trns(' '.join(args), dest='ru')
             mess = trnsd.text + '\nPronunciation: '+trnsd.pronunciation
             await ctx.send(f'Translated text:\n```\n{mess}\n```')
