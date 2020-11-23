@@ -11,6 +11,11 @@ Instalacja:
 
 ## Dzienik zmian
 
+### 1.4.3
+**Zmiany**
+- zgoda admina na przyznawanie uprawnień
+- release
+
 ### 1.4.2
 **Zmiany**
 - Zmiana struktury pliku `perms.json`
@@ -77,4 +82,4 @@ Instalacja:
 - nie działająca komenda stop
 - brak opuszczania kanału
 
-❤ Specjalne podziękowanie dla @michkied za inspirację w tworzeniu głosowania 
+❤ Specjalne podziękowanie dla @michkied za inspirację w tworzeniu głosowania
