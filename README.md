@@ -9,6 +9,7 @@
 5. Podstaw token w pliku `secrets.py`
 6. ```python bot1.py```
 
+
 ##Komendy bota
 **Ogólne**
 `//trans <lang> fraza` - przetłumaczenie frazy (język wykrywany automatycznie) na podany
