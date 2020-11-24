@@ -40,6 +40,9 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 - komenda `votes`
 - aktualizacja elementów głosowania
 
+**Do zrobienia**
+- operowanie na ID (!!!)
+
 ### 2.0.0
 **Zmiany**
 - przetestowane wiele serwerów
