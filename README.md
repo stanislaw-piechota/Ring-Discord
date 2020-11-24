@@ -31,7 +31,14 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 `//ungrant <perm> <@użytkownik>` - odebranie uprawnienia dla użytkownika
 - _user_ może odebrać tylko uprawnienie _user_ (inaczej błąd)
 
+`//votes <votes>` - zmiana ilości osób niezbędnych do przegłosowania uprawnień
+
 ## Dzienik zmian
+
+### 2.0.1
+**Zmiany**
+- komenda `votes`
+- aktualizacja elementów głosowania
 
 ### 2.0.0
 **Zmiany**
