@@ -1,4 +1,4 @@
-# Bot do Discorda klasy 2E PLOPŁ
+# Bot przypominajka
 [![](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/downloads/release/python-378/) [![](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
 Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został wyposażony w funkcję tłumacza google w kilku niezbędnych językach (angielski, rosyjski, hiszpański i niemiecki). Bot potrzebuje uprawnień administratora. Został napisany w języku Python (domyślnie 3.7) na Windowsie, ale na Linuksie powinien działać bez problemów. W razie sugestii lub pytań można udać się do sekcji Issues.
@@ -117,5 +117,3 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 - problemy z dołączaniem do kanału
 - nie działająca komenda stop
 - brak opuszczania kanału
-
-❤ Specjalne podziękowanie dla @michkied za inspirację w tworzeniu głosowania
