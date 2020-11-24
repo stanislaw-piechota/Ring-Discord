@@ -101,8 +101,8 @@ class Perms(commands.Cog):
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Granting permission **{perm}** for user **{new}**\n\n' \
                    f'{admin_state} Admin: {admin_name}\n' \
-                   ':arrows_counterclockwise: Waiting for approve ({}/10)'
-            embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+                   ':arrows_counterclockwise: Waiting for approve ({}/{})'
+            embed = discord.Embed(description=text.format(len(apprs), self.data[serv]['votes']), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
             message = await ctx.send(embed=embed)
             await message.add_reaction('✅')
@@ -110,7 +110,7 @@ class Perms(commands.Cog):
             def check(reaction, user):
                 return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
 
-            while not (not len(apprs)<10 and admin_appr):
+            while not (not len(apprs)<self.data[serv]['votes'] and admin_appr):
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
                 except asyncio.TimeoutError:
@@ -120,7 +120,10 @@ class Perms(commands.Cog):
                     return
 
                 apprs = await reaction.users().flatten()
-                apprs.remove(ctx.guild.me)
+                try:
+                    apprs.remove(ctx.guild.me)
+                except Exception as e:
+                    print(e)
 
                 if user.nick[:2] in self.data[serv]['perms']['grant']['ba']:
                     admin_appr = True
@@ -129,9 +132,9 @@ class Perms(commands.Cog):
 
                 text = '**__CHANGING PERMISSIONS__**\n' \
                        f'Granting permission **{perm}** for user **{new}**\n\n' \
-                       f':{admin_state} Admin: {admin_name}\n' \
-                       ':arrows_counterclockwise: Waiting for approve ({}/10)'
-                embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
+                       f'{admin_state} Admin: {admin_name}\n' \
+                       ':arrows_counterclockwise: Waiting for approve ({}/{})'
+                embed = discord.Embed(description=text.format(len(apprs), self.data[serv]['votes']), color=0xfffffe)
                 embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
                 await message.edit(embed=embed)
 
@@ -208,7 +211,7 @@ class Perms(commands.Cog):
             apprs = []; admin_appr = False; admin_name = 'waiting for approve'; admin_state = ':arrows_counterclockwise:'
             text = '**__CHANGING PERMISSIONS__**\n' \
                    f'Taking away permission **{perm}** from user **{new}**\n\n' \
-                   f':{admin_state} Admin: {admin_name}\n' \
+                   f'{admin_state} Admin: {admin_name}\n' \
                    ':arrows_counterclockwise: Waiting for approve ({}/10)'
             embed = discord.Embed(description=text.format(len(apprs)), color=0xfffffe)
             embed.set_thumbnail(url=ctx.message.mentions[0].avatar_url)
@@ -218,7 +221,7 @@ class Perms(commands.Cog):
             def check(reaction, user):
                 return str(reaction.emoji)=='✅' and reaction.message==message and user!=ctx.guild.me
 
-            while not (not len(apprs)<10 and admin_appr):
+            while not (not len(apprs)<self.data[serv]['votes'] and admin_appr):
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
                 except asyncio.TimeoutError:
@@ -228,7 +231,10 @@ class Perms(commands.Cog):
                     return
 
                 apprs = await reaction.users().flatten()
-                apprs.remove(ctx.guild.me)
+                try:
+                    apprs.remove(ctx.guild.me)
+                except Exception as e:
+                    print(e)
 
                 if user.nick[:2] in self.data[serv]['perms']['grant']['ba']:
                     admin_appr = True
@@ -277,3 +283,16 @@ class Perms(commands.Cog):
             mess += 'None\n'
         mess += '\n```'
         await ctx.send(mess)
+
+    @commands.command()
+    async def votes(self, ctx, votes: int):
+        serv = ctx.guild.name
+        print(f'{self.dt()} VOTES {serv} {ctx.author}')
+        if ctx.author.nick[:2] in self.data[serv]['perms']['grant']['ba']:
+            self.data[serv]['votes'] = votes
+            self.saveData()
+            await ctx.send(f'Votes limit changed to **{votes}**')
+        elif ctx.author.nick[:2] in self.data[serv]['perms']['grant']['bv']:
+            await ctx.send('You can not invoke this command. Only admin feature :shrug: :sunglasses:')
+        else:
+            await ctx.send('You do not have permission to invoke this command')
