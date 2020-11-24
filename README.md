@@ -1,7 +1,7 @@
 # Bot do Discorda klasy 2E PLOPŁ
 [![](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/downloads/release/python-378/) [![](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
-Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został wyposażony w funkcję tłumacza google w kilku niezbędnych językach (angielski, rosyjski, hiszpański i niemiecki). Bot potrzebuje uprawnień do pisania wiadomości oraz dołączania do kanału głosowego. Aby działał potrzebuje również rolę pozwalającą na dołączanie do wszystkich kanałów głosowych, a także obserwowanie prywatnych kanałów tekstowych. Został napisany w języku Python (domyślnie 3.7) na Windowsie, ale na Linuksie powinien działać bez problemów. W razie problemów, sugestii lub pytań można udać się do sekcji Issues.
+Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został wyposażony w funkcję tłumacza google w kilku niezbędnych językach (angielski, rosyjski, hiszpański i niemiecki). Bot potrzebuje uprawnień administratora. Został napisany w języku Python (domyślnie 3.7) na Windowsie, ale na Linuksie powinien działać bez problemów. W razie sugestii lub pytań można udać się do sekcji Issues.
 
 ## Komendy bota
 **Ogólne**
