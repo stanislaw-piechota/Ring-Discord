@@ -9,10 +9,13 @@ class Trans(commands.Cog):
     def __init__(self, bot, dt):
         self.bot = bot; self.dt = dt
 
+    async def log(self, message):
+        await self.bot.get_channel(780912356573184020).send(message)
+
     @commands.command(brief='trans [pl/en/es/ru] "text"')
     async def trans(self, ctx, lang: str, phrase: str):
         serv = ctx.guild.name
-        print(f'{self.dt()} TRANS {serv} {ctx.author}')
+        await self.log(f'{self.dt()} TRANS {serv} {ctx.author}')
         try:
             avlb = ['pl', 'en', 'ru', 'es']
             if lang in avlb:
@@ -31,7 +34,7 @@ class Trans(commands.Cog):
     @commands.command(brief='ru text')
     async def ru(self, ctx, *args):
         serv = ctx.guild.name
-        print(f'{self.dt()} RU {serv} {ctx.author}')
+        await self.log(f'{self.dt()} RU {serv} {ctx.author}')
         try:
             trnsd = trns(' '.join(args), dest='ru')
             mess = trnsd.text + '\nPronunciation: '+trnsd.pronunciation

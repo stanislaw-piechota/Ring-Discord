@@ -12,11 +12,14 @@ class Ring(commands.Cog):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
+    async def log(self, message):
+        await self.bot.get_channel(780912356573184020).send(message)
+
     @commands.command()
     async def ring(self, ctx):
-        serv = ctx.guild.name
-        print(f'{self.dt()} RING {serv} {ctx.author}')
-        if ctx.author.nick[:2] in self.data[serv]['perms']['ring']['ba'] or ctx.author.nick[:2] in self.data[serv]['perms']['ring']['bv']:
+        serv = str(ctx.guild.id)
+        await self.log(f'{self.dt()} RING {ctx.guild.name} {ctx.author}')
+        if ctx.author.id in self.data[serv]['perms']['ring']['ba'] or ctx.author.id in self.data[serv]['perms']['ring']['bv']:
             if ctx.author.voice:
                 try:
                     ctx.voice_client.disconnect()
@@ -47,9 +50,9 @@ class Ring(commands.Cog):
 
     @commands.command(brief='volume <percent> - changes volume')
     async def volume(self, ctx, vol : int):
-        serv = ctx.guild.name
-        print(f'{self.dt()} VOLUME {serv} {ctx.author}')
-        nick = ctx.author.nick[:2]
+        serv = str(ctx.guild.id)
+        await self.log(f'{self.dt()} VOLUME {ctx.guild.name} {ctx.author}')
+        nick = ctx.author.id
         if nick in self.data[serv]['perms']['volume']['ba'] or nick in self.data[serv]['perms']['volume']['bv']:
             self.data[serv]['vol'] = vol
             with open('perms.json', 'w') as f:
