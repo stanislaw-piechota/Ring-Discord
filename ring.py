@@ -60,3 +60,42 @@ class Ring(commands.Cog):
             await ctx.send(f'Volume changed to {vol}%')
         else:
             await ctx.send('You don\'t have permissions to invoke this command')
+
+    @commands.command()
+    async def rm(self, ctx, mess:str, secs: int, start: str, ):
+        await self.log(f'{self.dt()} RM {ctx.guild.name} {ctx.author.name}')
+        channels = ctx.guild.channels
+        for channel in channels.copy():
+            if type(channel) != discord.TextChannel:
+                channels.remove(channel)
+        
+        if not len(channels):
+            await ctx.send(f'There are no text channels')
+        else:
+            for channel in channels.copy():
+                if not channel.name.startswith(start):
+                    channels.remove(channel)
+            if not len(channels):
+                await ctx.send(f'There is no channel that starts with **{start}**')
+            elif len(channels) == 1:
+                await asyncio.sleep(secs)
+                await channels[0].send(mess)
+            else:
+                possible = 'Possible channels are:\n```\n'
+                for i, c in enumerate(channels):
+                    possible += f'{i+1}: {c.name}\n'
+                possible += '```\nType in number of channel you want to choose'
+                main = await ctx.send(possible)
+
+                def check(msg):
+                    return (msg.content.isdigit() or msg.content=='quit') and msg.author.name == ctx.author.name
+
+                try:
+                    msg = await self.bot.wait_for('message', timeout=15, check=check)
+                except asyncio.TimeoutError:
+                    await main.edit(':alarm_clock: **Time to choose passed**')
+                    return
+
+                await asyncio.sleep(secs)
+                await channels[int(msg.content)-1].send(mess)
+
