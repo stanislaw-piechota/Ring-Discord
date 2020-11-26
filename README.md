@@ -20,6 +20,8 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//changelog` - plik z dziennikiem zmian dla ostatniej stabilnej wersji
 
+`//covid` - (beta) wyświetla najnowsze statystyki COVID (źródło: koronawirus.abczdrowie.pl)
+
 **Dla osób z uprawnieniami**
 
 `//ring` - Dołączenie do kanału autora; włączenie sygnału; opuszczenie kanału
@@ -38,6 +40,16 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 `//rm <"message"> <seconds> <starting_letter>`
 
 ## Dzienik zmian
+
+### 2.3.1-beta
+**Zmiany**
+- komenda `covid`
+
+**Do zrobienia**
+- więcej statystyk (zgony)
+
+**Problemy**
+- brak testów
 
 ### 2.2.1
 **Zmiany**
