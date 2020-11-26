@@ -18,6 +18,8 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//perms` - wyświetla permisje autora wiadomości
 
+`//changelog` - plik z dziennikiem zmian dla ostatniej stabilnej wersji
+
 **Dla osób z uprawnieniami**
 
 `//ring` - Dołączenie do kanału autora; włączenie sygnału; opuszczenie kanału
@@ -33,7 +35,13 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//votes <votes>` - zmiana ilości osób niezbędnych do przegłosowania uprawnień
 
+`//rm <"message"> <seconds> <starting_letter>`
+
 ## Dzienik zmian
+
+### 2.2.1
+**Zmiany**
+- komenda `changelog`
 
 ### 2.2.0
 **Zmiany**

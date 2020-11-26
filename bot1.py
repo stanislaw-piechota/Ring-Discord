@@ -21,6 +21,11 @@ async def on_ready():
     print('Logged in as {0} ({0.id})'.format(bot.user))
     print('------')
 
+@bot.command(brief='Displays changelog')
+async def changelog(ctx):
+    file = discord.File("changelog.txt")
+    await ctx.send("Changelog **v2.2.0**", file=file)
+
 bot.add_cog(Ring(bot, data, dt))
 bot.add_cog(Trans(bot, dt))
 bot.add_cog(Perms(bot, data, dt))
