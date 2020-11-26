@@ -33,7 +33,7 @@ class Ring(commands.Cog):
             else:
                 await ctx.send("You are not connected to a voice channel.")
                 return
-            self._play(ctx, 'dzwonek.mp3')
+            self._play(ctx, 'additional/dzwonek.mp3')
             ctx.voice_client.source.volume = self.data[serv]['vol']/100
             await asyncio.sleep(2)
             await ctx.voice_client.disconnect()
