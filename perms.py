@@ -61,6 +61,11 @@ class Perms(commands.Cog):
     async def grant(self, ctx, perm : str):
         serv = str(ctx.guild.id)
         await self.log(f'{self.dt()} GRANT {ctx.guild.name} {ctx.author}')
+
+        if perm not in self.data[serv]['perms'].keys():
+            await ctx.send('Argument **perm** is missing')
+            return
+
         if ctx.author.id in self.data[serv]['perms']['grant']['ba']:
             if perm == 'help':
                 await ctx.send('You can grant following permissions:\n```\nall\ngrant\nring\nvolume```')
@@ -128,7 +133,7 @@ class Perms(commands.Cog):
                 except Exception as e:
                     print(e)
 
-                if user.nick[:2] in self.data[serv]['perms']['grant']['ba']:
+                if user.id in self.data[serv]['perms']['grant']['ba']:
                     admin_appr = True
                     admin_name = user
                     admin_state = ':white_check_mark:'
