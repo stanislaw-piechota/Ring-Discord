@@ -35,9 +35,20 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 ## Dzienik zmian
 
+### 2.1.1
+**Zmiany**
+- naprowione pozostałości po systemie uprawnień
+- obsługa braku argumentu komendy `grant`
+
+**Problemy**
+- niezidentyfikowany problem słownika
+
 ### 2.1.0
 **Zmiany**
 - operowanie na ID
+
+**Problemy**
+- błędy głosowanie (pozostałość nicków)
 
 ### 2.0.1
 **Zmiany**
