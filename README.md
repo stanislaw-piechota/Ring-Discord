@@ -22,7 +22,7 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//link` - wysyła link pozwalający botowi dołączyć do serwera
 
-`//pEvent` - (beta) dodaje symbol jakiegoś wydarzenia do avatara (strajk kobiet)
+`//pEvent` - (beta) dodaje symbol jakiegoś wydarzenia do avatara (strajk kobiet) (tylko Windows)
 
 **Dla osób z uprawnieniami**
 
