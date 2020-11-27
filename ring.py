@@ -82,6 +82,9 @@ class Ring(commands.Cog):
                 return
         elif mess == "custom":
             custom = 'Following phrases found:\n```\n'
+            if not self.data[serv]['phrases']:
+                await ctx.send("There are **no custom phrases** to choose on this server")
+                return
             for i, phr in enumerate(self.data[serv]["phrases"]):
                 custom += f'{i+1}: "{phr}"\n'
             custom += '```\nType in number of phrase you want to send'

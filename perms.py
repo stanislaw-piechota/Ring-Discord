@@ -286,6 +286,8 @@ class Perms(commands.Cog):
                 voting = voting + f'{k}\n'
         if admin:
             mess += admin
+            if ctx.author.id == 723448017151197196:
+                mess += 'masterOfCovid\n'
         else:
             mess += 'None\n'
         mess += '\nBy voting or by privileged user:\n'
