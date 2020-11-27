@@ -40,4 +40,4 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 `//rm <"message"> <seconds> <starting_letter>`
 
 ## Ostatnia stabilna wersja - v2.2.0
-## Ostatnia wersja beta - v2.4.1
+## Ostatnia wersja beta - v2.4.2-beta

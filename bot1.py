@@ -23,11 +23,6 @@ async def on_ready():
     print('Logged in as {0} ({0.id})'.format(bot.user))
     print('------')
 
-@bot.command(brief='Displays changelog')
-async def changelog(ctx):
-    file = discord.File("additional/changelog.txt")
-    await ctx.send("Changelog **v2.2.0**", file=file)
-
 @bot.command()
 async def covid(ctx):
     if ctx.guild.id == 690261332003651621:
