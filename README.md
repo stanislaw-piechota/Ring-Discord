@@ -18,9 +18,11 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//perms` - wyświetla permisje autora wiadomości
 
-`//changelog` - plik z dziennikiem zmian dla ostatniej stabilnej wersji
-
 `//covid` - (beta) wyświetla najnowsze statystyki COVID (źródło: koronawirus.abczdrowie.pl)
+
+`//link` - wysyła link pozwalający botowi dołączyć do serwera
+
+`//pEvent` - (beta) dodaje symbol jakiegoś wydarzenia do avatara (strajk kobiet)
 
 **Dla osób z uprawnieniami**
 
@@ -37,7 +39,7 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//votes <votes>` - zmiana ilości osób niezbędnych do przegłosowania uprawnień
 
-`//rm <"message"> <seconds> <starting_letter>`
+`//rm <"msg"> <s> <l>` - (beta, chwilowo dostępne dla każdego użytkownika) wysyła przypomnienie _msg_ po _s_ sekundach zaczynającego się na _l_
 
 ## Ostatnia stabilna wersja - v2.2.0
 ## Ostatnia wersja beta - v2.4.2-beta
