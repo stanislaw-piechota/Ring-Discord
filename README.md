@@ -39,7 +39,7 @@ Ring to bot umożliwiający przypomnienie nauczycielowi o końcu lekcji. Został
 
 `//votes <votes>` - zmiana ilości osób niezbędnych do przegłosowania uprawnień
 
-`//rm <"msg"> <s> <l>` - (beta, chwilowo dostępne dla każdego użytkownika) wysyła przypomnienie _msg_ po _s_ sekundach zaczynającego się na _l_
+`//rm <"msg"> <s> <l>` - (beta, chwilowo dostępne dla każdego użytkownika) wysyła przypomnienie _msg_ po _s_ sekundach na kanał zaczynający się na_l_
 
 ## Ostatnia stabilna wersja - v2.2.0
 ## Ostatnia wersja beta - v2.4.2-beta
