@@ -25,7 +25,8 @@
       }
     },
     "vol": 10,
-    "votes": 3
+    "votes": 3,
+    "phrases": []
   },
   "703184188135964702": {
     "perms": {
@@ -52,6 +53,11 @@
       }
     },
     "vol": 10,
-    "votes": 2
+    "votes": 2,
+    "phrases": [
+      "Przypominamy o ko\u0144cu lekcji",
+      "koniec lekcji ju\u017c niebawem",
+      "koniec ju\u017c blisko"
+    ]
   }
 }

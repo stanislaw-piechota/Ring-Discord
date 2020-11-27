@@ -38,7 +38,8 @@ class Perms(commands.Cog):
                     if message.content == 'activate':
                         dcp = {"perms":{"ring":{"ba":[message.author.id],"bv":[]}, \
                         "volume":{"ba":[message.author.id], "bv":[]}, \
-                        "grant":{"ba":[message.author.id], "bv":[]}}, "vol":100, "votes":10}
+                        "grant":{"ba":[message.author.id], "bv":[]}}, "vol":100, "votes":10, \
+                        "phrases": []}
                         self.data[str(guild.id)] = dcp
 
                         self.saveData()

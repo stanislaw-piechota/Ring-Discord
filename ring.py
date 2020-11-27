@@ -2,6 +2,7 @@ import asyncio
 import discord
 import json
 from discord.ext import commands
+from random import choice
 
 class Ring(commands.Cog):
     def __init__(self, bot, data, dt):
@@ -61,13 +62,41 @@ class Ring(commands.Cog):
         else:
             await ctx.send('You don\'t have permissions to invoke this command')
 
-    @commands.command()
+    @commands.command(brief='rm <"message"> <seconds> <starting_letter>')
     async def rm(self, ctx, mess:str, secs: int, start: str, ):
+        serv = str(ctx.guild.id)
         await self.log(f'{self.dt()} RM {ctx.guild.name} {ctx.author.name}')
         channels = ctx.guild.channels
         for channel in channels.copy():
             if type(channel) != discord.TextChannel:
                 channels.remove(channel)
+
+        def check(msg):
+                    return (msg.content.isdigit() or msg.content=='quit') and msg.author.name == ctx.author.name
+
+        if mess == "random":
+            if self.data[serv]["phrases"]:
+                mess = choice(self.data[serv]["phrases"])
+            else:
+                await ctx.send("There are **no custom phrases** to choose on this server")
+                return
+        elif mess == "custom":
+            custom = 'Following phrases found:\n```\n'
+            for i, phr in enumerate(self.data[serv]["phrases"]):
+                custom += f'{i+1}: "{phr}"\n'
+            custom += '```\nType in number of phrase you want to send'
+            main = await ctx.send(custom)
+            try:
+                msg = await self.bot.wait_for('message', timeout=30, check=check)
+            except asyncio.TimeoutError:
+                await main.edit(':alarm_clock: **Time to choose passed**')
+                return
+            mess = self.data[serv]['phrases'][int(msg.content)-1]
+
+        if mess not in self.data[serv]["phrases"]:
+            self.data[serv]["phrases"].append(mess)
+            with open('perms.json', 'w') as file:
+                file.write(json.dumps(self.data, indent=2))
         
         if not len(channels):
             await ctx.send(f'There are no text channels')
@@ -87,11 +116,8 @@ class Ring(commands.Cog):
                 possible += '```\nType in number of channel you want to choose'
                 main = await ctx.send(possible)
 
-                def check(msg):
-                    return (msg.content.isdigit() or msg.content=='quit') and msg.author.name == ctx.author.name
-
                 try:
-                    msg = await self.bot.wait_for('message', timeout=15, check=check)
+                    msg = await self.bot.wait_for('message', timeout=30, check=check)
                 except asyncio.TimeoutError:
                     await main.edit(':alarm_clock: **Time to choose passed**')
                     return
@@ -99,3 +125,26 @@ class Ring(commands.Cog):
                 await asyncio.sleep(secs)
                 await channels[int(msg.content)-1].send(mess)
 
+    @commands.command()
+    async def phrase(self, ctx, opt: str, phrase = None):
+        serv = str(ctx.guild.id)
+        if opt == 'add':
+            self.data[serv]['phrases'].append(phrase)
+            with open('perms.json', 'w') as file:
+                file.write(json.dumps(self.data, indent=2))
+            await ctx.send(f'Phrase **{phrase}** added to catalogue')
+        elif opt == 'show':
+            msg = 'Saved phrases:\n```\n'
+            for i, e in enumerate(self.data[serv]['phrases']):
+                msg += f'{i+1}: {e}\n'
+            msg += '```'
+            await ctx.send(msg)
+        elif opt == 'remove':
+            try:
+                self.data[serv]['phrases'].pop(int(phrase)-1)
+                with open('perms.json', 'w') as file:
+                   file.write(json.dumps(self.data, indent=2))
+                await ctx.send(f'Phrase with index {int(phrase)} removed')
+            except Exception as e:
+                print(e)
+                await ctx.send(f'Phrase with index {int(phrase)} does not exist')
