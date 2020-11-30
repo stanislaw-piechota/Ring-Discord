@@ -13,6 +13,11 @@ class Photos(commands.Cog):
             os.system(f'powershell Invoke-WebRequest {ctx.author.avatar_url} -o avatars/avatar.png')
 
             l_img, s_img = cv2.imread('avatars/avatar.png'), cv2.imread('avatars/thunder.png', -1)
+            scale = l_img.shape[1]/256
+            dim = (int(s_img.shape[1]*scale), int(s_img.shape[0]*scale))
+            print(s_img.shape)
+            s_img = cv2.resize(s_img, dim, interpolation=cv2.INTER_AREA)
+            print(s_img.shape)
             x_offset, y_offset = 30, 60
 
             y1, y2 = y_offset, y_offset + s_img.shape[0]
