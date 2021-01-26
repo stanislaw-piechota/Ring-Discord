@@ -14,7 +14,9 @@
           631826268022898688,
           723448017151197196
         ],
-        "bv": []
+        "bv": [
+          428606217556983809
+        ]
       },
       "volume": {
         "ba": [
@@ -24,10 +26,13 @@
         "bv": []
       }
     },
-    "vol": 10,
-    "votes": 3,
+    "vol": 60,
+    "votes": 10,
     "phrases": [
-      "koniec lekcji"
+      "koniec lekcji",
+      "przypominamy o ko\u0144cu lekcji",
+      "test",
+      "koniec"
     ]
   },
   "703184188135964702": {
@@ -59,7 +64,33 @@
     "phrases": [
       "Przypominamy o ko\u0144cu lekcji",
       "koniec lekcji ju\u017c niebawem",
-      "koniec ju\u017c blisko"
+      "koniec ju\u017c blisko",
+      "przypominamy o ko\u0144cu lekcji"
     ]
+  },
+  "765466136154210324": {
+    "perms": {
+      "ring": {
+        "ba": [
+          626385063721828371
+        ],
+        "bv": []
+      },
+      "volume": {
+        "ba": [
+          626385063721828371
+        ],
+        "bv": []
+      },
+      "grant": {
+        "ba": [
+          626385063721828371
+        ],
+        "bv": []
+      }
+    },
+    "vol": 100,
+    "votes": 10,
+    "phrases": []
   }
 }

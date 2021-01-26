@@ -34,12 +34,48 @@ class Ring(commands.Cog):
             else:
                 await ctx.send("You are not connected to a voice channel.")
                 return
-            self._play(ctx, 'additional/dzwonek.mp3')
+            try:
+                self._play(ctx, 'additional/ring.mp3')
+            except Exception as e:
+                await ctx.send('There is no file for this user')
+                print(e)
             ctx.voice_client.source.volume = self.data[serv]['vol']/100
             await asyncio.sleep(2)
             await ctx.voice_client.disconnect()
         else:
             await ctx.send('You don\'t have permissions to invoke this command')
+
+    @commands.command()
+    async def iam(self, ctx, numer=None):
+        serv = str(ctx.guild.id)
+        await self.log(f'{self.dt()} RING {ctx.guild.name} {ctx.author}')
+        num = int(ctx.author.nick[:2])
+        if numer: num = int(numer)
+        if ctx.author.voice:
+            try:
+                await ctx.voice_client.disconnect()
+            except:
+                pass
+            finally:
+                try:
+                    await ctx.author.voice.channel.connect()
+                except:
+                    await ctx.send('Bot already joined channel. Please wait')
+        else:
+            await ctx.send("You are not connected to a voice channel.")
+            return
+        try:
+            self._play(ctx, f'voices/{num}.mp3')
+        except Exception as e:
+            await ctx.send('There is no file for this user')
+            print(e)
+        try:
+            ctx.voice_client.source.volume = self.data[serv]['vol']/100
+        except Exception as e:
+            ctx.volume_client.source.volume = 100
+            print(e)
+        await asyncio.sleep(2)
+        await ctx.voice_client.disconnect()
 
     '''@commands.command()
     async def stop(self, ctx):
@@ -100,7 +136,7 @@ class Ring(commands.Cog):
             self.data[serv]["phrases"].append(mess)
             with open('perms.json', 'w') as file:
                 file.write(json.dumps(self.data, indent=2))
-        
+
         if not len(channels):
             await ctx.send(f'There are no text channels')
         else:
